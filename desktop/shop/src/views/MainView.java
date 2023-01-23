@@ -1,6 +1,5 @@
 package views;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javafx.collections.FXCollections;
@@ -13,12 +12,14 @@ import javafx.scene.layout.VBox;
 import models.DataService;
 import models.MariadbDatabase;
 import models.Product;
+import models.Restapi;
 
 public class MainView extends VBox{
     Label productLabel;
     DataService dataService;
+    Restapi restapi;
     TableView<Product> tableView;
-    public MainView() {
+    public MainView(){
         productLabel = new Label("Termékek");
         
         this.initData();
@@ -60,17 +61,18 @@ public class MainView extends VBox{
     }
     private ObservableList<Product> getProducts() {
         ObservableList<Product> productList = 
-        FXCollections.observableArrayList(dataService.getProducts());
+        FXCollections.observableArrayList(restapi.getProducts());
         return productList;
     }
     private void initData() {
+        this. restapi = new Restapi();
         dataService = new DataService(new MariadbDatabase(
             "shop",
             "shop",
             "titok"
         ));
-        // ArrayList<Product> productList = dataService.getProducts();
-        // System.out.println(productList.get(0).getName());
+        ArrayList<Product> productList = dataService.getProducts();
+        System.out.println(productList.get(0).getName());
     }
     
 }
